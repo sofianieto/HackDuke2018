@@ -6,21 +6,23 @@ import json
 
 #app = Flask(__name__)
 with open('configs/configs.json') as json_data:
-    password = json.load(json_data).get("SQLDatabase").get("password")
+    jsonInfo = json.load(json_data)
+    host = jsonInfo.get("SQLDatabase").get("host")
+    user = jsonInfo.get("SQLDatabase").get("user")
+    password = jsonInfo.get("SQLDatabase").get("password")
 
 def connectToData():
     mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password=password,
-        database="testdb"
+        host=host,
+        user=user,
+        password=password
     )
 
     mycursor = mydb.cursor()
-    sqlFormula = "INSERT INTO students (name, age) VALUES (%s, %s)"
-    student1 = ("Rachel", 22)
-    mycursor.execute(sqlFormula, student1)  # add formula using given data
-    mydb.commit()  # required to save changes to the table
+    #sqlFormula = "INSERT INTO students (name, age) VALUES (%s, %s)"
+    #student1 = ("Rachel", 22)
+    #mycursor.execute(sqlFormula, student1)  # add formula using given data
+    #mydb.commit()  # required to save changes to the table
 
 
 
