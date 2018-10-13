@@ -1,10 +1,6 @@
-// $("button").click(function(){
-//     $.get("demo_test.asp", function(data, status){
-//         alert("Data: " + data + "\nStatus: " + status);
-//     });
-// });
+$("button").click(function(){
+    var userq = $('#question').val();
+    $.post( "http://127.0.0.1:5000/questionData", { question: userq } );
+    });
 
 
-var userq = $('#question').val();
-
-$.post( "test.php", { question: userq } );
