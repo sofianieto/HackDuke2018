@@ -3,6 +3,7 @@ import requests
 import random
 import mysql.connector
 import json
+import uuid
 
 app = Flask(__name__)
 
@@ -23,35 +24,36 @@ def connectToData():
 
 @app.route('/questionData', methods=['POST'])
 def addToData():
-    r = request.args
+    if request.json and request.json.get("question"):
+        r = request.json
+        question = r.get("question")
+    else:
+        return "No question sent"
     print(r)
+    print(question)
     mydb = connectToData()
     mycursor = mydb.cursor()
-    return "0"
+    sqlFormula = "INSERT INTO questions (question, id) VALUES (%s, %s)"
+    id = str(uuid.uuid4())
+    print(id)
+    entryTuple = (question, id)
+    mycursor.execute(sqlFormula, entryTuple)  # add formula using given data
+    mydb.commit()  # required to save changes to the table
 
+    # mycursor.execute("CREATE DATABASE testdb")
+    # mycursor.execute("SHOW DATABASES")
+    # for db in mycursor:
+    #      print(db)
+    # mycursor.execute("SHOW TABLES")
+    # for tb in mycursor:
+    #     print(tb)
+    # mycursor.execute("CREATE TABLE questions (question VARCHAR(500), id INTEGER(20))")
 
-
-
-
-    #sqlFormula = "INSERT INTO students (name, age) VALUES (%s, %s)"
     #student1 = ("Rachel", 22)
     #mycursor.execute(sqlFormula, student1)  # add formula using given data
     #mydb.commit()  # required to save changes to the table
 
-
-
-    # mycursor.execute("SHOW TABLES")
-    # for tb in mycursor:
-    #     print(tb)
-
-    #mycursor.execute("CREATE TABLE questions (question VARCHAR(500), id INTEGER(20))")
-
-
-    #mycursor.execute("CREATE DATABASE testdb")
-    # mycursor.execute("SHOW DATABASES")
-    # for db in mycursor:
-    #      print(db)
-
+    return "success"
 
 
 
